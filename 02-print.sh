@@ -23,3 +23,9 @@ echo hello world
  ## same colors printed with more brightness with BOLD option
 
  echo -e "\e[1;31mRED\e[1;32mGREEN\e[1;33mYELLOW\e[1;34mBLUE\e[1;35mMAGENTA\e[1;36mCYAN\e[0n"
+
+ ## there are two more esc seq generally use in scripting
+ # 1. New line \n
+ # 2. New tab \t
+ echo -e "Line1\nLine2"
+ echo -e "WORD1\t\tWORD2"
