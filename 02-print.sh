@@ -4,7 +4,7 @@ echo hello world
 
 
 ## print in color
-#Syntax : echo -e "\e[COLmMESS\[0n"
+#Syntax : echo -e "\e[COLmMESS\e[0n"
  # -e option to enable esc seq \e
  # \e - to enable color
  # [COLm - COL is color number
@@ -18,4 +18,4 @@ echo hello world
  # Magenta                          35
  # Cyan                             36
 
- echo -e "\e[31mRED\e[32mGREEN\e[33mYELLOW\e[34mBLUE\e[35mMAGENTA\e[36mCYAN\[0n"
+ echo -e "\e[31mRED\e[32mGREEN\e[33mYELLOW\e[34mBLUE\e[35mMAGENTA\e[36mCYAN\e[0n"
