@@ -10,3 +10,7 @@ echo Good afternoon, today is $DATE
 ## command substitution
 DATE=$(date +%F)
 echo Good afternoon, today is $DATE
+
+## arithmetic substitution
+EXPR1=$((9+7-2*8/2*3))
+echo EXPR1 OUTPUT = $EXPR1
