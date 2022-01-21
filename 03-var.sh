@@ -14,3 +14,6 @@ echo Good afternoon, today is $DATE
 ## arithmetic substitution
 EXPR1=$((9+7-2*8/2*3))
 echo EXPR1 OUTPUT = $EXPR1
+
+## Trying to access a variable from shell command line
+echo course Name = "$COURSE_NAME"
