@@ -8,6 +8,6 @@ then
 fi
 
 if [ $a != 'abc' ]; then
-  echo ok
+  echo NotOK
 fi
 
