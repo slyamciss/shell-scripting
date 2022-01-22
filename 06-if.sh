@@ -7,7 +7,7 @@ then
   echo ok
 fi
 
-  if [ $a != "abc"]
-  then
-    echo NOTOK
-  fi
+if [ $a != 'abc' ]; then
+  echo ok
+fi
+
