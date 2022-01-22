@@ -11,3 +11,8 @@ if [ $a != 'abc' ]; then
   echo NotOK
 fi
 
+if [ -z "$b" ]; then
+  echo B is empty/ not declared variable
+fi
+
+
