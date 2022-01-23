@@ -1,3 +1,3 @@
-#!/bin/bash
 
-echo installing frontend
+
+yum install nginx -y
