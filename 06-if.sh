@@ -20,8 +20,9 @@ if [ $a -eq 100 ]; then
 echo a is ok
 fi
 
-Age=21
+Age=19
 if [ $Age = '21' ]; then
   echo 'You are a big man now'
+else echo 'You are not there yet'
 fi
 
