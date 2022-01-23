@@ -20,4 +20,8 @@ if [ $a -eq 100 ]; then
 echo a is ok
 fi
 
+Age=21
+if [ $Age = '19' ]; then
+  echo 'You are not mature yet'
+fi
 
