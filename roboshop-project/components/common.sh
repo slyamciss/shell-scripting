@@ -1,4 +1,3 @@
-
 LOG_FILE=/tmp/roboshop.log
 rm -f $LOG_FILE
 
@@ -44,7 +43,7 @@ SYSTEMD_SETUP() {
   chown roboshop:roboshop /home/roboshop/ -R &>>$LOG_FILE
 
   echo "Update ${COMPONENT} SystemD file"
-  sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>$LOG_FILE
+  sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/CARTENDPOINT/cart.roboshop.internal/' -e 's/DBHOST/mysql.roboshop.internal/' -e 's/CARTHOST/cart.roboshop.internal/' -e 's/USERHOST/user.roboshop.internal/' -e 's/AMQPHOST/rabbitmq.roboshop.internal/' -e 's/RABBITMQ-IP/rabbitmq.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>$LOG_FILE
   STAT $?
 
   echo "Setup ${COMPONENT} SystemD file"
@@ -52,9 +51,7 @@ SYSTEMD_SETUP() {
   STAT $?
 
   echo "Start ${COMPONENT} Service"
-  systemctl daemon-relaod  &>>$LOG_FILE
-  systemctl enable ${COMPONENT} &>>$LOG_FILE
-  systemctl restart ${COMPONENT} &>>$LOG_FILE
+  systemctl daemon-relaod  &>>$LOG_FILE && systemctl enable ${COMPONENT} &>>$LOG_FILE && systemctl restart ${COMPONENT} &>>$LOG_FILE
   STAT $?
 
 }
@@ -90,8 +87,47 @@ JAVA() {
 
   echo "Compile ${COMPONENT} Code"
   cd /home/roboshop/${COMPONENT}
-  mvn clean package &>>$LOG_FILE
-  mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
+  mvn clean package &>>$LOG_FILE && mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
+  STAT $?
+
+  SYSTEMD_SETUP
+}
+
+PYTHON() {
+  COMPONENT=$1
+
+  echo "Install Python"
+  yum install python36 gcc python3-devel -y &>>$LOG_FILE
+  STAT $?
+
+  APP_USER_SETUP_WITH_APP
+
+  echo "Install Python Dependencies for ${COMPONENT}"
+  cd /home/roboshop/${COMPONENT}
+  pip3 install -r requirements.txt &>>$LOG_FILE
+  STAT $?
+
+  echo "Update Application Config"
+  USER_ID=$(id -u roboshop)
+  GROUP_ID=$(id -g roboshop)
+  sed -i -e "/uid/ c uid = ${USER_ID}" -e "/gid/ c gid = ${GROUP_ID}" /home/roboshop/${COMPONENT}/${COMPONENT}.ini
+  STAT $?
+
+  SYSTEMD_SETUP
+}
+
+GOLANG() {
+  COMPONENT=$1
+
+  echo "Install GoLang"
+  yum install golang -y &>>$LOG_FILE
+  STAT $?
+
+  APP_USER_SETUP_WITH_APP
+
+  echo "Build GoLang Code"
+  cd /home/roboshop/${COMPONENT}
+  go mod init dispatch &>>$LOG_FILE && go get  &>>$LOG_FILE && go build &>>$LOG_FILE
   STAT $?
 
   SYSTEMD_SETUP
